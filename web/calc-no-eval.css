@@ -1,0 +1,121 @@
+/* 固定値の定義 */
+:root {
+  --button-w: 52px;
+  --button-h: 48px;
+  --button-wide: calc((var(--button-w) * 3 + var(--button-margin-w)*4)/2 - var(--button-margin-w) ); /* x1.5 button */
+  --button-margin-w: 5px;
+  --button-margin-h: 7.5px;
+  --button-margin-wide: 38px;  /* margin between number and operator */
+  --line-increase-factor: 2px;
+  --button-wideL1: calc( var(--button-wide) + var(--line-increase-factor) * 0);
+  --button-wideL2: calc( var(--button-wide) + var(--line-increase-factor) * 1);
+  --button-wideL3: calc( var(--button-wide) + var(--line-increase-factor) * 2);
+  --button-wideL4: calc( var(--button-wide) + var(--line-increase-factor) * 3);
+  --display-w: 330px;
+  --display-h: 38px;
+  --display-margin-top: 8px;
+  --display-margin-bottom: 108px;
+  --keyboard-offset-L1: calc(6px - var(--line-increase-factor)*0);
+  --keyboard-offset-L2: calc(6px - var(--line-increase-factor)*1);
+  --keyboard-offset-L3: calc(6px - var(--line-increase-factor)*2);
+  --keyboard-offset-L4: calc(6px - var(--line-increase-factor)*3);
+  --opacity-level-idle: 0.0;  /* when debug, change 0 -> 0.5 */
+  --opacity-level-hover: 0.1;
+  --opacity-level-active: 0.3;
+  --opacity-base-colorR: 0;
+  --opacity-base-colorG: 0;
+  --opacity-base-colorB: 0;  
+}
+
+/* テーブルの装飾 */
+.calculator {
+  /* 電卓のサイズ */
+  width: 680px;
+  height: 800px;
+  /* 電卓が浮き出るように影を付ける */
+/*
+  border: solid 1px #dcdcdca4;
+  border-right: solid 4px #dcdcdca4;
+  border-bottom: solid 4px #dcdcdca4;
+*/
+  border-radius: 10px;
+  /* インライン要素を中央に配置 */
+  text-align: center;
+  /* 余白調整 */
+  margin: 20px;
+  position: relative;
+}
+.calculator img {
+  height: 100%;
+  width: auto;
+}
+
+#C, #min, #mul, #pls {
+  width: var(--button-wide);
+  margin-left: var(--button-margin-wide);
+}
+
+#D0, #point {
+  width: var(--button-wideL4);
+}
+
+input, button{
+  /* ボタンのサイズ */
+  width: var(--button-w);
+  height: var(--button-h);
+  /* ボタンの文字サイズ */
+  font-size: x-large;
+  /* 数字部分の背景色 */
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-idle));
+  /* ボタンの詳細設定 */
+  border: none;
+  border-radius: 20px;
+  /* クリック時の黒枠を消す */
+  outline: none;
+  margin-left: var(--button-margin-w);
+  margin-right: var(--button-margin-w);
+  margin-top: var(--button-margin-h);
+  margin-bottom: var(--button-margin-h);
+}
+
+.overTheImage {
+  position: absolute;
+/*
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+*/
+  top: 0; left: 50%;
+  transform: translate(-50%, 0);
+  width: 700px;
+  padding-top: 240px;
+  padding-bottom: 100px;
+  padding-left: var(--keyboard-offset-L4);
+}
+
+/* ディスプレイの詳細設定 */
+.display {
+  width: var(--display-w);
+  height: var(--display-h);
+  text-align: right; /* 文字を右詰めに */
+  /* 見た目の詳細設定 */
+  color: skyblue;
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-idle));
+  border-radius: 5px;
+  margin-top: var(--display-margin-top);
+  margin-bottom: var(--display-margin-bottom);
+}
+
+/* 記号＝の部分の背景色を上書きで設定 */
+.equal {
+  width: var(--button-w);
+}
+
+/* カーソルを上に乗せた時に色を濃くする */
+button:hover {
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-hover));
+}
+
+/* クリック時に色を濃くする */
+button:active {
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-active));
+}

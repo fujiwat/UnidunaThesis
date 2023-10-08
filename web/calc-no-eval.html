@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="calc-no-eval.css">
+      </head>
+      <body>
+
+        <h2 style="text-align:center">Simulator of World’s First Handheld Calculator</h2>
+        <h2 style="text-align:center">SHARP QT-8B</h2>
+
+        <div class="calculator" id="calculator">
+            <img id="image" src="P1000257s.jpg" alt="Sharp QT-8B" />
+            <div class="overTheImage">
+                <input type="text" class="display" id="display" readonly />
+                <br/>
+                <button onclick="appendNumber('7')" id="D7"></button>
+                <button onclick="appendNumber('8')" id="D8"></button>
+                <button onclick="appendNumber('9')" id="D9"></button>
+                <button onclick="clearDisplay()" id="C"></button>
+                <br/>
+                <button onclick="appendNumber('4')" id="D4"></button>
+                <button onclick="appendNumber('5')" id="D5" id="5"></button>
+                <button onclick="appendNumber('6')" id="D6" id="6"></button>
+                <button class="operator" onclick="appendOperator('-')" id="min"></button>
+                <br/>
+                <button onclick="appendNumber('1')" id="D1"></button>
+                <button onclick="appendNumber('2')" id="D2"></button>
+                <button onclick="appendNumber('3')" id="D3"></button>
+                <button class="operator" onclick="appendOperator('*')" id="mul"></button>
+                <br/>
+                <button onclick="appendNumber('0')" id="D0"></button>
+                <button onclick="appendNumber('.')" id="point"></button>
+                <button class="operator" onclick="appendOperator('+')" id="pls"></button>
+    <!--
+                <button class="operator" onclick="appendOperator('/')"></button>
+                <br/>
+                <button class="equal" onclick="calculate()">=</button>
+    -->
+            </div>
+        </div>
+        <script src="calc-no-eval.js"></script>
+
+    </body>
+</html>
