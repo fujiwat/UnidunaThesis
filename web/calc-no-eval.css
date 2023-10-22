@@ -152,4 +152,5 @@ button:active {
 
 .message {
   text-align: left;
+  white-space: pre;
 }

@@ -44,6 +44,7 @@ const calc_messages = Object.freeze( {
     after_poweron:  "Press the [C] button twice, to reset the system after power on.",
     C_pressed_once: "Press the [C] button onece more!!  To reset the system.",
     ready:          "Ready.",
+    sound_ready:    "Sound is ready.<br />\t\tPress the [C] button twice, to reset the system after power on.",
 })
 
 function isDigit(n) {
@@ -242,7 +243,7 @@ class sound {
         --this.#initializeCounter;
         if ( this.#initializeCounter == 0 ) {
             this.#vSlider.disabled = false;
-            msg.print("Sound is ready.");
+            msg.print(calc_messages.sound_ready);
         }
     }
     play ( key ) {
@@ -268,10 +269,10 @@ class message {
         this.#element = document.getElementById("id_message")
     }
     print(str) {
-        this.#element.textContent = str;
+        this.#element.innerHTML = "\t" + str;
     }
 }
-msg = new message();
+
 
 class calculator {
     #reg_a; #reg_b;
@@ -469,4 +470,5 @@ function ClearPushed() {
     calc.ClearPushed("C");
 }
 
+const msg = new message();
 const calc = new calculator();
