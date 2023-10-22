@@ -3,43 +3,47 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="calc-no-eval.css">
-      </head>
-      <body>
+    </head>
+    <body>
+        <div class="page">
+            <h2 style="text-align:center">Simulator of World’s First Handheld Calculator<br />
+                                                        SHARP QT-8B</h2>
 
-        <h2 style="text-align:center">Simulator of World’s First Handheld Calculator</h2>
-        <h2 style="text-align:center">SHARP QT-8B</h2>
-
-        <div class="calculator" id="calculator">
-            <img id="image" src="P1000257s.jpg" alt="Sharp QT-8B" />
+            <div class="calculator" id="calculator">
+            <img id="image" src="images/P1000257s.jpg" alt="Sharp QT-8B" />
             <div class="overTheImage">
-                <input type="text" class="display" id="display" readonly />
+                <input class="display" id="display0" readonly />
+                <input class="display" id="display1" readonly />
                 <br/>
-                <button onclick="appendNumber('7')" id="D7"></button>
-                <button onclick="appendNumber('8')" id="D8"></button>
-                <button onclick="appendNumber('9')" id="D9"></button>
-                <button onclick="clearDisplay()" id="C"></button>
+                <button onclick="NumberPushed('7')" id="D7"></button>
+                <button onclick="NumberPushed('8')" id="D8"></button>
+                <button onclick="NumberPushed('9')" id="D9"></button>
+                <button onclick="ClearPushed('C')" id="C"></button>
                 <br/>
-                <button onclick="appendNumber('4')" id="D4"></button>
-                <button onclick="appendNumber('5')" id="D5" id="5"></button>
-                <button onclick="appendNumber('6')" id="D6" id="6"></button>
-                <button class="operator" onclick="appendOperator('-')" id="min"></button>
+                <button onclick="NumberPushed('4')" id="D4"></button>
+                <button onclick="NumberPushed('5')" id="D5" id="5"></button>
+                <button onclick="NumberPushed('6')" id="D6" id="6"></button>
+                <button onclick="OperatorPushed('-')" id="min"></button>
                 <br/>
-                <button onclick="appendNumber('1')" id="D1"></button>
-                <button onclick="appendNumber('2')" id="D2"></button>
-                <button onclick="appendNumber('3')" id="D3"></button>
-                <button class="operator" onclick="appendOperator('*')" id="mul"></button>
+                <button onclick="NumberPushed('1')" id="D1"></button>
+                <button onclick="NumberPushed('2')" id="D2"></button>
+                <button onclick="NumberPushed('3')" id="D3"></button>
+                <button onclick="OperatorPushed('*')" id="mul"></button>
                 <br/>
-                <button onclick="appendNumber('0')" id="D0"></button>
-                <button onclick="appendNumber('.')" id="point"></button>
-                <button class="operator" onclick="appendOperator('+')" id="pls"></button>
-    <!--
-                <button class="operator" onclick="appendOperator('/')"></button>
-                <br/>
-                <button class="equal" onclick="calculate()">=</button>
-    -->
+                <button onclick="NumberPushed('0')" id="D0"></button>
+                <button onclick="NumberPushed('.')" id="point"></button>
+                <button onclick="OperatorPushed('+')" id="pls"></button>
+            </div>
+            <div>
+                <div class="volume" >
+                    <label for="id_vSlider">Volume: </label>
+                    <input style="width:70px" type="range" id="id_vSlider" min="0" max="1" step="0.1" value="0.5">
+                </div>
+                <div>
+                    <div class="message">QT-8B&gt; &nbsp;<span id="id_message">Loading ...</span></div>
+                </div>
             </div>
         </div>
         <script src="calc-no-eval.js"></script>
-
     </body>
 </html>

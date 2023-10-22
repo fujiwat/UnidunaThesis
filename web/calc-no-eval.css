@@ -1,43 +1,52 @@
-/* 固定値の定義 */
+/* define fixed values */
 :root {
-  --button-w: 52px;
-  --button-h: 48px;
-  --button-wide: calc((var(--button-w) * 3 + var(--button-margin-w)*4)/2 - var(--button-margin-w) ); /* x1.5 button */
-  --button-margin-w: 5px;
-  --button-margin-h: 7.5px;
-  --button-margin-wide: 38px;  /* margin between number and operator */
-  --line-increase-factor: 2px;
-  --button-wideL1: calc( var(--button-wide) + var(--line-increase-factor) * 0);
-  --button-wideL2: calc( var(--button-wide) + var(--line-increase-factor) * 1);
-  --button-wideL3: calc( var(--button-wide) + var(--line-increase-factor) * 2);
-  --button-wideL4: calc( var(--button-wide) + var(--line-increase-factor) * 3);
-  --display-w: 330px;
-  --display-h: 38px;
-  --display-margin-top: 8px;
-  --display-margin-bottom: 108px;
-  --keyboard-offset-L1: calc(6px - var(--line-increase-factor)*0);
-  --keyboard-offset-L2: calc(6px - var(--line-increase-factor)*1);
-  --keyboard-offset-L3: calc(6px - var(--line-increase-factor)*2);
-  --keyboard-offset-L4: calc(6px - var(--line-increase-factor)*3);
-  --opacity-level-idle: 0.0;  /* when debug, change 0 -> 0.5 */
+  /* display area */
+  --display-w: 310px;
+  --display-h: 54px;
+  --display-margin-top: 28px;
+  --display-margin-bottom: 112px;
+  --display-margin-left: 6px;
+  --display-margin-right: 12px;
+  --display-perspective: 700px;   /* inside keyboard transform */
+  --display-rotateX: -32deg;      /* inside keyboard transform */
+  --display-color-background: rgba(5,5,5,1);
+  --display-color-foreground: rgba(105,235,212,1.0);
+  --display-color-shadow: rgba(94,216,196,1.0);
+  --display-bluer-size: 4px;
+  /* keyboard */
+  --keyboard-perspective: 1200px;
+  --keyboard-rotateX: 23deg;
+  --keyboard-offset-L:  2px;
   --opacity-level-hover: 0.1;
   --opacity-level-active: 0.3;
+  --opacity-level-idle: 0.0;      /* when debug, change 0.0 -> 0.5 */
   --opacity-base-colorR: 0;
   --opacity-base-colorG: 0;
-  --opacity-base-colorB: 0;  
+  --opacity-base-colorB: 0;
+  /* button */
+  --button-w: 48px;
+  --button-h: 45px;
+  --button-wide:                  /* wide button */
+    calc((var(--button-margin-w) + var(--button-w) + var(--button-margin-w))*3/2 - (var(--button-margin-w) * 2));
+  --button-margin-w: 6px;
+  --button-margin-h: 9px;
+  --button-margin-wide: 36px;     /* margin between number and operator */
+  --letter-spc: 0.15em;
 }
 
-/* テーブルの装飾 */
-.calculator {
-  /* 電卓のサイズ */
+@font-face {
+  font-family: "VFDigit";
+  src: url("./fonts/VFDigit9A.woff2") format("woff2");
+}
+
+.page {
+  width: 700px;
+  height: 800px;
+}
+
+.calculator { 
   width: 680px;
   height: 800px;
-  /* 電卓が浮き出るように影を付ける */
-/*
-  border: solid 1px #dcdcdca4;
-  border-right: solid 4px #dcdcdca4;
-  border-bottom: solid 4px #dcdcdca4;
-*/
   border-radius: 10px;
   /* インライン要素を中央に配置 */
   text-align: center;
@@ -50,16 +59,59 @@
   width: auto;
 }
 
+.overTheImage {
+  position: absolute;
+  top: 0; left: 50%;
+  /* transform: translate(-50%, 0); */
+  transform: translate(-50%, 0) perspective(var(--keyboard-perspective)) rotateX(var(--keyboard-rotateX));
+  width: 700px;
+  padding-top: 200px;
+  padding-bottom: 100px;
+  padding-left: var(--keyboard-offset-L);
+  margin-bottom: 10px;
+}
+
+/* number display */
+textarea {
+  white-space: nowrap;
+  overflow: hidden;
+  resize: none;
+}
+.display {
+  transform: perspective(var(--display-perspective)) rotateX(var(--display-rotateX)) rotate(0.5deg);
+  width: var(--display-w);
+  height: var(--display-h);
+  border: none;
+  text-align: right; /* 文字を右詰めに */
+  /* 見た目の詳細設定 */
+  color: var(--display-color-foreground);
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-idle));
+  border-radius: 5px;
+  margin-top: var(--display-margin-top);
+  margin-bottom: var(--display-margin-bottom);
+  margin-left: var(--display-margin-left);
+  margin-right: var(--display-margin-right);
+  padding: 0px 14px 2px 8px;
+  font-family: "VFDigit";
+  font-size: 46px;
+  letter-spacing: var(--letter-spc);
+  text-shadow: 0 0 var(--display-bluer-size) var(--display-color-shadow);
+}
+#display0 {
+  position: absolute;
+  background: var(--display-color-background);
+}
+
 #C, #min, #mul, #pls {
   width: var(--button-wide);
   margin-left: var(--button-margin-wide);
 }
 
 #D0, #point {
-  width: var(--button-wideL4);
+  width: var(--button-wide);
 }
 
-input, button{
+button{
   /* ボタンのサイズ */
   width: var(--button-w);
   height: var(--button-h);
@@ -78,33 +130,6 @@ input, button{
   margin-bottom: var(--button-margin-h);
 }
 
-.overTheImage {
-  position: absolute;
-/*
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-*/
-  top: 0; left: 50%;
-  transform: translate(-50%, 0);
-  width: 700px;
-  padding-top: 240px;
-  padding-bottom: 100px;
-  padding-left: var(--keyboard-offset-L4);
-}
-
-/* ディスプレイの詳細設定 */
-.display {
-  width: var(--display-w);
-  height: var(--display-h);
-  text-align: right; /* 文字を右詰めに */
-  /* 見た目の詳細設定 */
-  color: skyblue;
-  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-idle));
-  border-radius: 5px;
-  margin-top: var(--display-margin-top);
-  margin-bottom: var(--display-margin-bottom);
-}
-
 /* 記号＝の部分の背景色を上書きで設定 */
 .equal {
   width: var(--button-w);
@@ -118,4 +143,13 @@ button:hover {
 /* クリック時に色を濃くする */
 button:active {
   background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-active));
+}
+
+.volume {
+  text-align: right;
+  width:  680px;
+}
+
+.message {
+  text-align: left;
 }
