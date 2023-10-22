@@ -260,6 +260,22 @@ class key {
         this.elementId = elementId;
         this.keyTop = keyTop;
         this.function = funcName;
+        if ( elementId != "" ) {
+            // same as button:hover
+            document.getElementById(elementId).addEventListener("mouseover", function() {
+                this.style.backgroundColor = "rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-hover))";
+            });
+            document.getElementById(elementId).addEventListener("mouseleave", function() {
+                this.style.backgroundColor = "rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-idle))";
+            });
+            // same as button:active
+            document.getElementById(elementId).addEventListener("mousedown", function() {
+                this.style.backgroundColor = "rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-active))";
+            });
+            document.getElementById(elementId).addEventListener("mouseup", function() {
+                this.style.backgroundColor = "rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-idle))";
+            });
+        }
     }
 }
 

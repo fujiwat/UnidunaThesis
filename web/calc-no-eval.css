@@ -72,11 +72,6 @@
 }
 
 /* number display */
-textarea {
-  white-space: nowrap;
-  overflow: hidden;
-  resize: none;
-}
 .display {
   transform: perspective(var(--display-perspective)) rotateX(var(--display-rotateX)) rotate(0.5deg);
   width: var(--display-w);
@@ -133,16 +128,6 @@ button{
 /* 記号＝の部分の背景色を上書きで設定 */
 .equal {
   width: var(--button-w);
-}
-
-/* カーソルを上に乗せた時に色を濃くする */
-button:hover {
-  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-hover));
-}
-
-/* クリック時に色を濃くする */
-button:active {
-  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-active));
 }
 
 .volume {
