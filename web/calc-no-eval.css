@@ -10,9 +10,7 @@
   --display-perspective: 700px;   /* inside keyboard transform */
   --display-rotateX: -32deg;      /* inside keyboard transform */
   --display-color-background: rgba(5,5,5,1);
-  --display-color-foreground: rgba(105,235,212,1.0);
-  --display-color-shadow: rgba(94,216,196,1.0);
-  --display-bluer-size: 4px;
+  --display-color-foreground: rgba(94,216,196,1);
   /* keyboard */
   --keyboard-perspective: 1200px;
   --keyboard-rotateX: 23deg;
@@ -72,6 +70,11 @@
 }
 
 /* number display */
+textarea {
+  white-space: nowrap;
+  overflow: hidden;
+  resize: none;
+}
 .display {
   transform: perspective(var(--display-perspective)) rotateX(var(--display-rotateX)) rotate(0.5deg);
   width: var(--display-w);
@@ -90,7 +93,6 @@
   font-family: "VFDigit";
   font-size: 46px;
   letter-spacing: var(--letter-spc);
-  text-shadow: 0 0 var(--display-bluer-size) var(--display-color-shadow);
 }
 #display0 {
   position: absolute;
@@ -130,6 +132,16 @@ button{
   width: var(--button-w);
 }
 
+/* カーソルを上に乗せた時に色を濃くする */
+button:hover {
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-hover));
+}
+
+/* クリック時に色を濃くする */
+button:active {
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-active));
+}
+
 .volume {
   text-align: right;
   width:  680px;
@@ -137,5 +149,4 @@ button{
 
 .message {
   text-align: left;
-  white-space: pre;
 }
