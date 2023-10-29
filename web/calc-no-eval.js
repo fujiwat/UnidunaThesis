@@ -335,6 +335,7 @@ class calculator {
         this.#key["DELETE"] =   new key("C",        "C",    this.ClearPushed.bind(this));
         this.#key["/"] =        new key("mul",      "*",    this.OperatorPushed.bind(this));
         this.#key["="] =        new key("pls",      "+",    this.OperatorPushed.bind(this));
+        this.#key[" "] =        new key("pls",      "+",    this.OperatorPushed.bind(this));
         this.#key["ENTER"] =    new key("pls",      "+",    this.OperatorPushed.bind(this));
         this.#key["BACKSPACE"] =new key("",    "\u232b",    this.BackspacePushed.bind(this));
         window.addEventListener("keydown", this.keyDown.bind(this), false );
@@ -344,11 +345,12 @@ class calculator {
     keyDown(e) {
         let k = e.key.toUpperCase();
         if ( !(this.#key[k] === undefined) ) {
-            if ( this.#key[k].elementId !="" ) {
+            if ( this.#key[k].elementId != "" ) {
                 document.getElementById(this.#key[k].elementId).style.backgroundColor =
                 "rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-active))";
             }
             this.#key[k].function( this.#key[k].keyTop );
+            e.preventDefault(); 
         }
     }
     keyUp(e) {
