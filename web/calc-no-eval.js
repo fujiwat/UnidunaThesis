@@ -46,6 +46,9 @@ const calc_messages = Object.freeze( {
     ready:          "Ready.",
     sound_ready:    "Sound is ready.<br />\t\tPress the [C] button twice, to reset the system after power on.",
 })
+const calc_special_key = Object.freeze( {
+    backspace_keyTop: "\u232b",
+})
 
 function isDigit(n) {
     return /^\d$/.test(n);
@@ -217,22 +220,22 @@ class sound {
         this.#vSlider = document.getElementById('id_vSlider');
         this.#vSlider.disabled = true;
         //              keyTop, sound_file
-        this.initialize( "0",       "./sounds/keymove4.mp3" );
-        this.initialize( "1",       "./sounds/keymove12.mp3" );
-        this.initialize( "2",       "./sounds/keymove12.mp3" );
-        this.initialize( "3",       "./sounds/keymove12.mp3" );
-        this.initialize( "4",       "./sounds/keymove12.mp3" );
-        this.initialize( "5",       "./sounds/keymove12.mp3" );
-        this.initialize( "6",       "./sounds/keymove12.mp3" );
-        this.initialize( "7",       "./sounds/keymove12.mp3" );
-        this.initialize( "8",       "./sounds/keymove12.mp3" );
-        this.initialize( "9",       "./sounds/keymove12.mp3" );
-        this.initialize( ".",       "./sounds/keymove4.mp3" );
-        this.initialize( "C",       "./sounds/enter31.mp3" );
-        this.initialize( "-",       "./sounds/enter38.mp3" );
-        this.initialize( "*",       "./sounds/enter32.mp3" );
-        this.initialize( "+",       "./sounds/enter38.mp3" );
-        this.initialize( "\u232b",  "./sounds/keymove4.mp3" );
+        this.initialize( "0",       "./sounds/0.mp3" );
+        this.initialize( "1",       "./sounds/1.mp3" );
+        this.initialize( "2",       "./sounds/2.mp3" );
+        this.initialize( "3",       "./sounds/3.mp3" );
+        this.initialize( "4",       "./sounds/4.mp3" );
+        this.initialize( "5",       "./sounds/5.mp3" );
+        this.initialize( "6",       "./sounds/6.mp3" );
+        this.initialize( "7",       "./sounds/7.mp3" );
+        this.initialize( "8",       "./sounds/8.mp3" );
+        this.initialize( "9",       "./sounds/9.mp3" );
+        this.initialize( ".",       "./sounds/dot.mp3" );
+        this.initialize( "C",       "./sounds/C.mp3" );
+        this.initialize( "-",       "./sounds/MinEq.mp3" );
+        this.initialize( "*",       "./sounds/MulDiv.mp3" );
+        this.initialize( "+",       "./sounds/PlsEq.mp3" );
+        this.initialize( "\u232b",  "./sounds/BS.mp3" );
     }
     initialize ( key, filename ) {
         this.#initializeCounter++;
@@ -350,7 +353,7 @@ class calculator {
                 "rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-active))";
             }
             this.#key[k].function( this.#key[k].keyTop );
-            e.preventDefault(); 
+            e.preventDefault();             // avoid one more even from enter and space key.
         }
     }
     keyUp(e) {
@@ -364,7 +367,7 @@ class calculator {
     }
     ClearPushed(key) {
         console.log("[C]");
-        this.#sound_instance.play("C");
+        this.#sound_instance.play(key);
         switch ( this.#calc_st ) {
             case calc_sts.poweroff:
                 this.#calc_st = calc_sts.initial;
@@ -464,7 +467,7 @@ class calculator {
         if ( this.#calc_st == calc_sts.normal ) {
             if ( this.#calc_entry_st == calc_entry_sts.newEntry ) {
                 // same as clear button
-                this.ClearPushed();
+                this.ClearPushed(calc_special_key.backspace_keyTop);
             } else {
                 // backspace one key
                 this.#sound_instance.play(key);
