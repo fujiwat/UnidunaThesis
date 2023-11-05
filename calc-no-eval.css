@@ -1,0 +1,181 @@
+/* define fixed values */
+:root {
+  /* display area */
+  --display-w: 319px;
+  --display-h: 59px;
+  --display-h-gap: 5px;           /* gap for background to display00 */
+  --display-margin-top: 37.8px;
+  --display-margin-bottom: 170px;
+  --display-margin-left: 179px;
+  --display-margin-right: 200px;
+  --disply-padding-left: 2.1px;
+  --display-perspective: 750px;   /* inside diplay transform */
+  --display-rotateX: -29deg;      /* inside display transform */
+  --display-color-background: rgba(5,5,5, 1);    /* when debug, change (5,5,5, 1.0) -> (5,5,5, 0.5) */
+  --display-color-foreground: rgba(143,255,243,1.0);
+  --display-color-shadow1: rgba(94, 216, 196, 0.8);
+  --display-color-shadow2: rgba(94, 216, 196, 0.5);
+  --display-color-shadow3: rgba(94, 216, 196, 0.3);
+  --display-bluer-size: 4px;
+  /* keyboard */
+  --keyboard-perspective: 1200px;
+  --keyboard-rotateX: 13deg;
+  --keyboard-offset-L:  1px;
+  --keyboard-offset-R:  0px;
+  --opacity-level-hover: 0.1;
+  --opacity-level-active: 0.3;
+  --opacity-level-idle:   0.0;      /* when debug, change 0.0 -> 0.5 */
+  --opacity-base-colorR: 0;
+  --opacity-base-colorG: 0;
+  --opacity-base-colorB: 0;
+  /* button */
+  --button-w: 45.5px;
+  --button-h: 43px;
+  --button-wide:                  /* wide button */
+    calc((var(--button-margin-w) + var(--button-w) + var(--button-margin-w))*3/2 - (var(--button-margin-w) * 3/2));
+  --button-margin-w: 7.3px;
+  --button-margin-h: 9.0px;
+  --button-margin-wide: 38.6px;     /* margin between number and operator */
+  --letter-spc: 8.7px;
+}
+
+@font-face {
+  font-family: "VFDigit";
+  src: url("./fonts/VFDigit9A.woff2") format("woff2");
+}
+
+.page {
+  width: 700px;
+  height: 800px;
+}
+
+.calculator {
+  height: 800px;
+  width: 680px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 20px;
+  position: relative;
+}
+.calculator img {
+  height: 100%;
+  width: auto;
+}
+
+.overTheImage {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  text-align: center;
+  transform: perspective(var(--keyboard-perspective)) rotateX(var(--keyboard-rotateX));
+  padding-top: 200px;
+  padding-bottom: 100px;
+  padding-left:  var(--keyboard-offset-L);
+  padding-right: var(--keyboard-offset-R);
+}
+
+.layered-display {
+  position: relative;
+  transform:  perspective(var(--display-perspective)) rotateX(var(--display-rotateX)) rotate(0.5deg);
+  margin-top:     var(--display-margin-top);
+  margin-bottom:  var(--display-margin-bottom);
+  margin-left:    var(--display-margin-left);
+  margin-right:   var(--display-margin-right);
+  border-radius: 5px;
+}
+
+/* number display */
+.display {
+  position: absolute;
+  top: 0; left: 0;
+  width: var(--display-w);
+  height: var(--display-h);
+  border: none;
+  text-align: left;
+  color: var(--display-color-foreground);
+  background: rgba(0,0,0,0);              /* transparent */
+  font-family: "VFDigit";
+  font-size: 43px;
+  letter-spacing: var(--letter-spc);
+  /* text-shadow: 0 0 var(--display-bluer-size) var(--display-color-shadow); */
+  text-shadow:  0 0  6px var(--display-color-shadow1),
+                0 0  4px var(--display-color-shadow2),
+                0 0  2px var(--display-color-shadow3);
+}
+#display0 {
+}
+#display00 {
+  margin-top: var(--display-h-gap);
+  height: calc(var(--display-h) - var(--display-h-gap));
+  padding: 0px 0px 0px 0px;
+  width: var(--display-w);
+  background: var(--display-color-background);
+}
+#display1 {
+  padding-left: var(--disply-padding-left);
+}
+#display2 {
+  padding-left: var(--disply-padding-left);
+}
+#display3 {
+  width: 100%;
+  height: auto;
+  padding: 2px 0px 0px 0px;
+  opacity: 0.7;
+}
+
+#C, #min, #mul, #pls {
+  width: var(--button-wide);
+  margin-left: var(--button-margin-wide);
+}
+
+#D0, #point {
+  width: var(--button-wide);
+}
+
+button{
+  /* ボタンのサイズ */
+  width: var(--button-w);
+  height: var(--button-h);
+  /* ボタンの文字サイズ */
+  font-size: x-large;
+  /* 数字部分の背景色 */
+  background: rgba(var(--opacity-base-colorR), var(--opacity-base-colorG), var(--opacity-base-colorB), var(--opacity-level-idle));
+  /* ボタンの詳細設定 */
+  border: none;
+  border-radius: 30px;
+  /* クリック時の黒枠を消す */
+  outline: none;
+  margin-left: var(--button-margin-w);
+  margin-right: var(--button-margin-w);
+  margin-top: var(--button-margin-h);
+  margin-bottom: var(--button-margin-h);
+}
+
+/* 記号＝の部分の背景色を上書きで設定 */
+.equal {
+  width: var(--button-w);
+}
+
+.volume {
+  text-align: right;
+  width:  680px;
+}
+
+.message {
+  text-align: left;
+  white-space: pre;
+}
+
+footer {
+  background-color: lightgoldenrodyellow;
+  text-align: center;
+  padding: 5px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.licenses {
+  color:darkgoldenrod;
+}

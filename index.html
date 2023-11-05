@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" href="./images/QT-8B.ico" />
+        <link rel="stylesheet" href="calc-no-eval.css" />
+        <title>SHARP QT-8B Simulator</title>
+    </head>
+    <body>
+        <div class="page">
+            <h2 style="text-align:center">Simulator of World’s First Handheld Calculator<br />
+                                                        SHARP QT-8B</h2>
+            <div class="calculator" id="calculator">
+                <img id="image" src="images/P1000257s.jpg" alt="SHARP QT-8B" />
+                <div class="overTheImage">
+                    <div class="layered-display">
+                        <div class="display" id="display0">
+                            <div id="display00"></div>
+                        </div>
+                        <input class="display" id="display1" readonly />
+                        <input class="display" id="display2" readonly />
+                        <img class="display" id="display3" src="images/mesh.png" />
+                    </div>
+                    <br/>
+                    <button onclick="NumberPushed('7')" id="D7"></button>
+                    <button onclick="NumberPushed('8')" id="D8"></button>
+                    <button onclick="NumberPushed('9')" id="D9"></button>
+                    <button onclick="ClearPushed('C')" id="C"></button>
+                    <br/>
+                    <button onclick="NumberPushed('4')" id="D4"></button>
+                    <button onclick="NumberPushed('5')" id="D5" id="5"></button>
+                    <button onclick="NumberPushed('6')" id="D6" id="6"></button>
+                    <button onclick="OperatorPushed('-')" id="min"></button>
+                    <br/>
+                    <button onclick="NumberPushed('1')" id="D1"></button>
+                    <button onclick="NumberPushed('2')" id="D2"></button>
+                    <button onclick="NumberPushed('3')" id="D3"></button>
+                    <button onclick="OperatorPushed('*')" id="mul"></button>
+                    <br/>
+                    <button onclick="NumberPushed('0')" id="D0"></button>
+                    <button onclick="NumberPushed('.')" id="point"></button>
+                    <button onclick="OperatorPushed('+')" id="pls"></button>
+                </div>
+            </div>
+            <div>
+                <div class="volume" >
+                    <label for="id_vSlider">Volume: </label>
+                    <input style="width:70px" type="range" id="id_vSlider" min="0" max="1" step="0.1" value="0.5">
+                </div>
+                <div>
+                    <div class="message">QT-8B&gt;   <span id="id_message">Loading ...</span></div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>Copyright &copy; 2023 Takahiro Fujiwara</p>
+            <p class="licenses">Photo of QT-8B is used with permission from <a href="http://www.vintage-calculators.nl/">Tiny Henst</a>. Retrieved 2023-Oct-14.<br />
+                Font VFDigit is used with permission from <a href="https://github.com/jz5/fonts-vfdigit">jz5</a> (SIL Open Font License).  Retrieved 2023-Oct-14.
+            </p>
+        </footer>
+        <script src="calc-no-eval.js"></script>
+    </body>
+</html>
