@@ -79,8 +79,8 @@ class display {
         dotstr = dotstr.substring(0, 8);
         numstr = numstr.substring(0, 8);
         
-        document.getElementById("display0").value = dotstr + dotstr_lastDigit;
-        document.getElementById("display1").value = numstr + numstr_lastDigit;
+        document.getElementById("display1").value = dotstr + dotstr_lastDigit;
+        document.getElementById("display2").value = numstr + numstr_lastDigit;
         console.log("display=["+str + "]");
     }
     print(status, param) {
