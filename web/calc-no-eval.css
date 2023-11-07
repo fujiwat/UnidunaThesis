@@ -120,6 +120,7 @@
 #display3 {
   width: 100%;
   height: auto;
+  min-height: auto;
   padding: 2px 0px 0px 0px;
   opacity: 0.7;
 }
