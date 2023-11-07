@@ -8,10 +8,20 @@
 const calc_sts = Object.freeze( {
     poweroff:0,         // 
     initial: 1,         // 0.0.0.0.0.0.0.0.-
-    clickC1: 2,         // 0.0 0 0 0 0 0 0 -
-    normal:  3,         // 0 0 0 0 0 0 0 0
-    destroy: 4          // @ @ @ @ @ @ @ @ ・
+    zerodiv: 2,         // 0.0.0.0.0.0.0.0.-
+    clickC1: 3,         // 0.0 0 0 0 0 0 0 -
+    normal:  4,         // 0 0 0 0 0 0 0 0
+    destroy: 5          // @ @ @ @ @ @ @ @ ・
 } );
+const calc_sts_str = Object.freeze( {
+    poweroff:"",                        // 
+    initial: "0.0.0.0.0.0.0.0.-",       // 0.0.0.0.0.0.0.0.-
+    zerodiv: "0.0.0.0.0.0.0.0.",        // 0.0.0.0.0.0.0.0.-
+    clickC1: "0.0000000-",              // 0.0 0 0 0 0 0 0 -
+    normal:  "00000000",                // 0 0 0 0 0 0 0 0
+    destroy: "@@@@@@@@・"               // @ @ @ @ @ @ @ @ ・
+} );
+
 const calc_entry_sts = Object.freeze( {
     newEntry: 11,       // replace digit to the number string
     inEntry:  12,       // add one digit to the number string
@@ -49,11 +59,20 @@ const calc_messages = Object.freeze( {
 const calc_special_key = Object.freeze( {
     backspace_keyTop: "\u232b",
 })
-
+//
+// regular functions
+//
 function isDigit(n) {
     return /^\d$/.test(n);
 }
+function roundToDecimalPlace(num, decimalPlace) {
+    let multiplier = Math.pow(10, decimalPlace);
+    return Math.round(num * multiplier) / multiplier;
+}
 
+/***********************\
+    class display
+\***********************/
 class display {
     constructor() {
             }
@@ -86,13 +105,16 @@ class display {
     print(status, param) {
         switch ( status ) {
             case calc_sts.poweroff:
-                this.#strDisplay("");
+                this.#strDisplay(calc_sts_str.poweroff);
                 break;
             case calc_sts.initial:
-                this.#strDisplay("0.0.0.0.0.0.0.0.-");
+                this.#strDisplay(calc_sts_str.initial);
+                break;
+            case calc_sts.zerodiv:
+                this.#strDisplay( param.toString() );
                 break;
             case calc_sts.clickC1:
-                this.#strDisplay("0.0000000-");
+                this.#strDisplay(calc_sts_str.clickC1);
                 break;
             case calc_sts.normal:
                 this.#strDisplay( param.toString() );
@@ -103,6 +125,9 @@ class display {
     }
 }
 
+/***********************\
+    class register
+\***********************/
 class register {
     #regName;
     inDecimal;
@@ -120,7 +145,7 @@ class register {
         this.decimalRight = 0;
         this.decimalShow = true;
         this.#value = 0;
-        this.#valueNumDigit = "00000000";
+        this.#valueNumDigit = calc_sts_str.normal;
         this.#valueLstDigit = " ";
     }
     copyFrom (reg) {
@@ -133,9 +158,10 @@ class register {
     }
     // when ==0, display will be no decimal point or possibility of 0000.0000 depends on decimalDigits
     // when !=0, display has always decimal point in somewhere, depends on decimalDigits
-    set ( numStr ) {   // integer, floating number, -1.23 10 -0 -0.
+    set ( numStr, fixedmode ) {   // integer, floating number, -1.23 10 -0 -0.
         let num; let numabs;
         let lastDigit;
+        let st = calc_sts.normal;
         num = parseFloat(numStr);
         if ( num == "NaN" ) {    // Not a Number
             num = 0;
@@ -147,26 +173,44 @@ class register {
             lastDigit = " ";
             numabs = num;
         }
+        numabs = roundToDecimalPlace(numabs,7);
         this.#value = num;
-        console.log(this.#regName + ": set(" + numStr + ") num=" +num + " lastDigit=[" + lastDigit + "]");
         if ( Number.isInteger(num) ) {      // integer
-            this.#valueNumDigit = numabs.toString().padStart(8, "0") + "."
-            this.#value += ".";
+            if ( fixedmode != 0 ) {
+                this.#valueNumDigit = numabs.toFixed(7).padStart(9, "0");       // 8+len of (.) =  9
+            } else {
+                this.#valueNumDigit = numabs.toString().padStart(8, "0") + "."
+                this.#value += ".";
+            }
+            this.#valueLstDigit = lastDigit;
         } else {
             if ( Number.isFinite(num) ) {   // has decimal fraction
-                this.#valueNumDigit = numabs.toString().padStart(9, "0");   // 8+len of (.) =  9
+                if ( fixedmode != 0 ) {
+                    this.#valueNumDigit = numabs.toFixed(7).padStart(9, "0");   // 8+len of (.) =  9
+                } else {
+                    this.#valueNumDigit = numabs.toString().padStart(9, "0");   // 8+len of (.) =  9
+                }
+                this.#valueLstDigit = lastDigit;
             } else {                        // infinite number
-                this.#valueNumDigit = "0.0.0.0.0.0.0.0.";
+                this.#valueNumDigit = calc_sts_str.zerodiv;
+                st = calc_sts.zerodiv;
             }
         }
-        this.#valueLstDigit = lastDigit;
-        this.setValueFromNumLst();
+//        this.setValueFromNumLst();
         return this;
     }
     setNumDigit ( str ) {
-        if ( !(str.toString().includes(".")) ) {
+        str = str.toString();
+        if ( 2 <= str.length ) {
+            if ( (str.substring(0,1) == "0") && (str.substring(1,2)!=".") ) {
+                /* 0123  -> 123 */
+                str = str.substring(1);
+            }
+        }
+        if ( !(str.includes(".")) ) {
             str += ".";
         }
+        str = str.substring(0, 9);
         this.#valueNumDigit = str.toString().padStart(9, "0");
         this.setValueFromNumLst();
         return this;
@@ -212,6 +256,9 @@ class register {
     }
 }
 
+/***********************\
+    class sound
+\***********************/
 class sound {
     #audio = {};
     #vSlider;
@@ -255,6 +302,9 @@ class sound {
     }
 }
 
+/***********************\
+    class key (buttons)
+\***********************/
 class key {
     elementId;
     keyTop;
@@ -282,6 +332,9 @@ class key {
     }
 }
 
+/***********************\
+    class message
+\***********************/
 class message {
     #element;
     constructor(elementId) {
@@ -293,6 +346,9 @@ class message {
 }
 
 
+/***********************\
+    class calculator
+\***********************/
 class calculator {
     #reg_a; #reg_b;
     #calc_st;
@@ -376,6 +432,11 @@ class calculator {
                 this.#calc_st = calc_sts.clickC1;
                 msg.print(calc_messages.C_pressed_once);
                 break;
+            case calc_sts.zerodiv:
+                this.#calc_st = calc_sts.normal;
+                this.#reg_a.set(0, 0);
+                msg.print(calc_messages.ready);
+                break;    
             case calc_sts.clickC1:
                 this.#calc_st = calc_sts.normal;
                 msg.print(calc_messages.ready);
@@ -386,9 +447,8 @@ class calculator {
         this.#reg_b.clr();
         if ( this.#calc_prev_st != calc_prev_sts.num ) {
             this.#reg_a.clr();
-        } else {
         }
-        this.#disp.print( this.#calc_st, this.#reg_a.getStr());
+        this.#disp.print( this.#calc_st, this.#reg_a.getStr() );
         this.#calc_entry_st = calc_entry_sts.newEntry;
         this.#calc_prev_st = calc_prev_sts.clr; // save for clear command
     }
@@ -398,15 +458,19 @@ class calculator {
         switch(new_op) {
             case '-':       // -=
                 if ( this.#calc_prev_st=='*' ) { // high priority
-                    this.#disp.print( this.#calc_st, this.#reg_a.set( 0 - parseFloat(this.#reg_a.getNumber()) ).getStr() );
+                    this.#disp.print( this.#calc_st, this.#reg_a.set( 0 - parseFloat(this.#reg_a.getNumber()) ).getStr(), 0 );
                     return;
                 } else if ( this.#calc_prev_st==calc_prev_sts.num ) {
                     if ( this.#prev_op == '*' ) { // divide now
                         console.log("calc: " + this.#reg_a.getNumber() +  " / " + this.#reg_b.getNumber());
-                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) / parseFloat(this.#reg_b.getNumber()) + 0.00000000000001 );
+                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) / parseFloat(this.#reg_b.getNumber()), 1 );
+                        if ( this.#reg_a.getStr().substring(0, calc_sts_str.zerodiv.length) == calc_sts_str.zerodiv ) {
+                            this.#calc_st = calc_sts.zerodiv;
+                            msg.print("a.getStr()="+this.#reg_a.getStr() );
+                        }
                     } else {
                         console.log("calc: " + this.#reg_a.getNumber() +  " - " + this.#reg_b.getNumber());
-                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) - parseFloat(this.#reg_b.getNumber()) );
+                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) - parseFloat(this.#reg_b.getNumber()), 0 );
                     }
                  } else {
                     this.#reg_a.invLstDigit();
@@ -419,18 +483,18 @@ class calculator {
                 break;
             case '+':       // +=
                 if ( this.#calc_prev_st=='*' ) { // high priority
-                    this.#disp.print( this.#calc_st, this.#reg_a.set( 0 + parseFloat(this.#reg_a.getNumber()) ).getStr() );
+                    this.#disp.print( this.#calc_st, this.#reg_a.set( 0 + parseFloat(this.#reg_a.getNumber()) ).getStr(), 0 );
                     return;
                 } else if ( this.#calc_prev_st==calc_prev_sts.num ) {
                     if ( this.#prev_op == '*' ) { // multiply now
                         console.log("calc: " + this.#reg_a.getNumber() +  " * " + this.#reg_b.getNumber());
-                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) * parseFloat(this.#reg_b.getNumber()) );
+                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) * parseFloat(this.#reg_b.getNumber()), 0 );
                     } else {
                         console.log("calc: " + this.#reg_a.getNumber() +  " + " + this.#reg_b.getNumber());
-                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) + parseFloat(this.#reg_b.getNumber()) );
+                        this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) + parseFloat(this.#reg_b.getNumber()), 0 );
                     }
                 } else {
-                    this.#reg_a.set( parseFloat(this.#reg_a.getNumber()) );
+                    this.#reg_a.set( parseFloat(this.#reg_a.getNumber()), 0 );
                 }
                 this.#reg_b.copyFrom( this.#reg_a );
                 this.#disp.print( this.#calc_st, this.#reg_a.getStr() );
@@ -447,7 +511,11 @@ class calculator {
         if ( this.#calc_st == calc_sts.normal ) {
             if ( this.#calc_entry_st == calc_entry_sts.newEntry ) {
                 this.#calc_entry_st = calc_entry_sts.inEntry;
-                this.#inputStr = number;
+                if ( number == "." ) {   // first input "." -> "0."
+                    this.#inputStr = "0.";
+                } else {
+                    this.#inputStr = number;
+                }
             } else {
                 if ( number == "." ) {
                     if ( this.#inputStr.includes(".") ) {
@@ -455,9 +523,8 @@ class calculator {
                     }
                 }
                 this.#inputStr += number.toString();
-                this.#inputStr = this.#inputStr.substring(0, this.#inputStr.includes(".")? 9: 8 );
             }
-            this.#reg_b.setNumDigit( this.#inputStr );
+            this.#reg_b.setNumDigit( this.#inputStr, 0 );
             this.#disp.print( this.#calc_st, this.#reg_b.getStr() );
         }
         this.#calc_prev_st = calc_prev_sts.num; // save for clear command
@@ -472,13 +539,16 @@ class calculator {
                 // backspace one key
                 this.#sound_instance.play(key);
                 this.#inputStr = this.#inputStr.toString().slice(0,-1);
-                this.#reg_b.setNumDigit( this.#inputStr );
+                this.#reg_b.setNumDigit( this.#inputStr, 0 );
                 this.#disp.print( this.#calc_st, this.#reg_b.getStr() );
             }
         }
     }
 }
 
+/***********************\
+    event handlers
+\***********************/
 function NumberPushed(number) {
     calc.NumberPushed(number);
 }
@@ -491,5 +561,8 @@ function ClearPushed() {
     calc.ClearPushed("C");
 }
 
+/***********************\
+    main
+\***********************/
 const msg = new message();
 const calc = new calculator();

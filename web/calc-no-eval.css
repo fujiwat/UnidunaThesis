@@ -144,7 +144,6 @@ button{
   /* ボタンの詳細設定 */
   border: none;
   border-radius: 30px;
-  /* クリック時の黒枠を消す */
   outline: none;
   margin-left: var(--button-margin-w);
   margin-right: var(--button-margin-w);
@@ -174,6 +173,7 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  font-size: xx-small;
 }
 
 .licenses {
